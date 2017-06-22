@@ -2,3 +2,4 @@ npm-debug.log*
 sky-client/node_modules/
 sky-server/node_modules/
 sky-server/.nyc_output/
+sky-server/coverage/
