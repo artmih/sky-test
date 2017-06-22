@@ -30,15 +30,14 @@ export default class Basket extends React.Component {
 
     renderBasket() {
         const { basket } = this.props;
-        
-
-        if (basket.length > 0) {
+        console.log('AAA, renderBasket', basket);
+        if (basket.items.length > 0) {
             return (
                 <div className="panel panel-default">
                     <div className="panel-heading">Basket:</div>
                     <div className="panel-body">
                         <ul className="list-group">
-                            {basket.map(item => (
+                            {basket.items.map(item => (
                                 <li key={item} className="list-group-item">{item}</li>
                             ))}
                         </ul>

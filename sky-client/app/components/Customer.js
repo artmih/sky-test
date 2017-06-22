@@ -9,9 +9,8 @@ export default class Customer extends React.Component {
     }
 
     chooseUser(e) {
-        console.log('!!! chooseUser works !!!');
         this.setState({ customerSelected: e.currentTarget.value});
-        this.props.getUser(e.currentTarget.value);
+        this.props.getUser(e.currentTarget.value).then(function() { console.log('this happened after calling API from redux store'); });
     }
 
     render() {

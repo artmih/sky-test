@@ -31,8 +31,10 @@ class App extends React.Component {
                             getUser={this.props.customerActions.getUser} />
                     </div>
                     <div className="col-md-4 col-xs-12">
-                        <Products locationID={this.props.customer.locationID} 
+                        <Products 
+                            locationID={this.props.customer.locationID} 
                             products={this.props.products}
+                            basket={this.props.basket}
                             getProducts={this.props.productActions.getProducts}
                             addItemToBasket={this.props.basketActions.addItemToBasket}/>
                     </div>

@@ -16,17 +16,29 @@ export default class Products extends React.Component {
     }
 
     parseProducts() {
-        const { products } = this.props;
+        const { products, basket } = this.props;
+        console.log('AAA, parseProducts basket', basket);
+        //console.log('=== basket.items.findIndex()', basket.indexOf("Liverpool TV"));
         if (products.items.length > 0) {
             let sports = [], 
                 news = [];
             
             for (let i = 0; i <= products.items.length - 1; i++) {
                 if (products.items[i].category === "Sports") {
-                    sports.push(products.items[i]);
+                    sports.push({
+                        category: products.items[i].category,
+                        product: products.items[i].product,
+                        locationID: products.items[i].locationID,
+                        selected: false
+                    });
                 }
                 else if (products.items[i].category === "News") {
-                    news.push(products.items[i]);
+                    news.push({
+                        category: products.items[i].category,
+                        product: products.items[i].product,
+                        locationID: products.items[i].locationID,
+                        selected: false
+                    });
                 }
             }
 
@@ -38,11 +50,11 @@ export default class Products extends React.Component {
     }
 
     addItemToBasket(e) {
-        console.log('AAAAAAA', e.currentTarget.value);
-        this.props.addItemToBasket(e.currentTarget.value);
+        this.props.addItemToBasket({ id: e.currentTarget.value });
     }
 
     renderSportsItems(items) {
+        //checked={sportItem.selected === true}
         if (items.length) {
             return (
                 <div className="panel panel-default">
@@ -60,6 +72,7 @@ export default class Products extends React.Component {
     }
 
     renderNewsItems(items) {
+        //checked={newsItem.selected === true} 
         if (items.length) {
             return (
                 <div className="panel panel-default">
