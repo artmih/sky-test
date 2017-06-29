@@ -1,11 +1,12 @@
 import React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 export default class Products extends React.Component {
     constructor(props) {
         super(props);
         
-        this.addItemToBasket = this.addItemToBasket.bind(this);
+        this.toggleProduct = this.toggleProduct.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
@@ -17,8 +18,7 @@ export default class Products extends React.Component {
 
     parseProducts() {
         const { products, basket } = this.props;
-        console.log('AAA, parseProducts basket', basket);
-        //console.log('=== basket.items.findIndex()', basket.indexOf("Liverpool TV"));
+
         if (products.items.length > 0) {
             let sports = [], 
                 news = [];
@@ -29,7 +29,7 @@ export default class Products extends React.Component {
                         category: products.items[i].category,
                         product: products.items[i].product,
                         locationID: products.items[i].locationID,
-                        selected: false
+                        selected: basket.items.indexOf(products.items[i].product) > -1 ? true : false
                     });
                 }
                 else if (products.items[i].category === "News") {
@@ -37,7 +37,7 @@ export default class Products extends React.Component {
                         category: products.items[i].category,
                         product: products.items[i].product,
                         locationID: products.items[i].locationID,
-                        selected: false
+                        selected: basket.items.indexOf(products.items[i].product) > -1 ? true : false
                     });
                 }
             }
@@ -49,38 +49,29 @@ export default class Products extends React.Component {
         }
     }
 
-    addItemToBasket(e) {
-        this.props.addItemToBasket({ id: e.currentTarget.value });
+    toggleProduct(item) {
+        const { basket } = this.props;
+
+        if (item.selected)
+            this.props.removeItemFromBasket({ id: item.product });
+        else
+            this.props.addItemToBasket({ id: item.product });
     }
 
-    renderSportsItems(items) {
-        //checked={sportItem.selected === true}
+    renderItemsPanel(panelName, items) {
         if (items.length) {
             return (
                 <div className="panel panel-default">
-                    <div className="panel-heading">Sports:</div>
+                    <div className="panel-heading">{panelName}</div>
                     <div className="panel-body">
-                        {items.map(sportItem => (
-                            <div className="checkbox" key={sportItem.product}>
-                                <label><input type="checkbox" value={sportItem.product} onChange={this.addItemToBasket} />{sportItem.product}</label>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            );
-        }
-    }
-
-    renderNewsItems(items) {
-        //checked={newsItem.selected === true} 
-        if (items.length) {
-            return (
-                <div className="panel panel-default">
-                    <div className="panel-heading">News:</div>
-                    <div className="panel-body">
-                        {items.map(newsItem => (
-                            <div className="checkbox" key={newsItem.product}>
-                                <label><input type="checkbox" value={newsItem.product} onChange={this.addItemToBasket} />{newsItem.product}</label>
+                        {items.map(item => (
+                            <div className="checkbox" key={item.product}>
+                                <label>
+                                    <input type="checkbox" 
+                                        checked={item.selected}
+                                        onChange={() => { this.toggleProduct(item) }} />
+                                        {item.product}
+                                    </label>
                             </div>
                         ))}
                     </div>
@@ -98,13 +89,22 @@ export default class Products extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-md-6 col-xs-12">
-                        {this.renderSportsItems(parsedProducts.sports)}
+                        {this.renderItemsPanel('Sports', parsedProducts.sports)}
                     </div>
                     <div className="col-md-6 col-xs-12">
-                        {this.renderNewsItems(parsedProducts.news)}
+                        {this.renderItemsPanel('News', parsedProducts.news)}
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+Products.propTypes = {
+    locationID: PropTypes.string,
+    products: PropTypes.object,
+    basket: PropTypes.object,
+    getProducts: PropTypes.func.isRequired,
+    addItemToBasket: PropTypes.func.isRequired,
+    removeItemFromBasket: PropTypes.func.isRequired
+};

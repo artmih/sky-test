@@ -27,7 +27,9 @@ class App extends React.Component {
                 </nav>
                 <div className="row text-center">
                     <div className="col-md-4 col-xs-12">
-                        <Customer customer={this.props.customer} 
+                        <Customer 
+                            customer={this.props.customer}
+                            clearBasket={this.props.basketActions.removeAllProducts}
                             getUser={this.props.customerActions.getUser} />
                     </div>
                     <div className="col-md-4 col-xs-12">
@@ -36,10 +38,14 @@ class App extends React.Component {
                             products={this.props.products}
                             basket={this.props.basket}
                             getProducts={this.props.productActions.getProducts}
-                            addItemToBasket={this.props.basketActions.addItemToBasket}/>
+                            addItemToBasket={this.props.basketActions.addProduct}
+                            removeItemFromBasket={this.props.basketActions.removeProduct} />
                     </div>
                     <div className="col-md-4 col-xs-12">
-                        <Basket basket={this.props.basket}/>
+                        <Basket 
+                            basket={this.props.basket} 
+                            removeItemFromBasket={this.props.basketActions.removeProduct}
+                            clearBasket={this.props.basketActions.removeAllProducts} />
                     </div>
                 </div>
             </div>

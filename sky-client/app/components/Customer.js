@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 export default class Customer extends React.Component {
     constructor(props) {
@@ -10,7 +10,8 @@ export default class Customer extends React.Component {
 
     chooseUser(e) {
         this.setState({ customerSelected: e.currentTarget.value});
-        this.props.getUser(e.currentTarget.value).then(function() { console.log('this happened after calling API from redux store'); });
+        this.props.clearBasket(); // Clear basket because per user is unical products set which not accesable to other users from different locations
+        this.props.getUser(e.currentTarget.value);
     }
 
     render() {

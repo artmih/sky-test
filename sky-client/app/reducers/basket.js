@@ -6,7 +6,6 @@ export default function basketState(state = initialState, action) {
     
     switch(action.type) {
         case 'ADD_PRODUCT':
-            //return Object.assign({}, state, {items:[...state.items, action.payload.id]});
             return Object.assign({}, state, {
                 items: [
                     ...(state.items.filter(item => (item.id !== action.payload.id))), 
@@ -16,11 +15,11 @@ export default function basketState(state = initialState, action) {
         case 'REMOVE_PRODUCT':
             return Object.assign({}, state, {
                 items:[
-                    ...(state.items.filter(item => (item.id !== action.payload.id)))
+                    ...(state.items.filter(item => (item !== action.payload.id)))
                 ]
             });
         case 'REMOVE_ALL_PRODUCTS':
-            return Object.assign({}, state, { items:[...state.items, [] ] });
+            return Object.assign({}, state, { items: [] });
         default:
             return state;
     }

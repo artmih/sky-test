@@ -1,24 +1,19 @@
-function addProduct(item) {
+export function addProduct(item) {
     return {
         type: 'ADD_PRODUCT',
         payload: item
-    }
+    };
 }
 
-function removeProduct(item) {
+export function removeProduct(item) {
     return {
-        type: 'ADD_PRODUCT',
+        type: 'REMOVE_PRODUCT',
         payload: item
-    }
+    };
 }
 
-function removeAllProducts(item) {
+export function removeAllProducts() {
     return {
-        type: 'ADD_PRODUCT',
-        payload: item
-    }
-}
-
-export function addItemToBasket(item) {
-    return addProduct(item);
+        type: 'REMOVE_ALL_PRODUCTS'
+    };
 }
