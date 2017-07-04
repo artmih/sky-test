@@ -111,10 +111,10 @@ describe('/service/catalogue Catalogue service', () => {
                 res.body.should.be.a('array');
                 res.body.length.should.be.eql(4);
                 res.body.should.be.eql([
-                    { category: 'Sports', product: 'Arsenal TV', locationID: 'LONDON' },
-                    { category: 'Sports', product: 'Chelsea TV', locationID: 'LONDON' },
-                    { category: 'News', product: 'Sky News', locationID: '' },
-                    { category: 'News', product: 'Sky Sports News', locationID: '' }
+                    { id: 1, category: 'Sports', product: 'Arsenal TV', locationID: 'LONDON' },
+                    { id: 2, category: 'Sports', product: 'Chelsea TV', locationID: 'LONDON' },
+                    { id: 4, category: 'News', product: 'Sky News', locationID: '' },
+                    { id: 5, category: 'News', product: 'Sky Sports News', locationID: '' }
                 ]);
                 done();
             });
@@ -129,10 +129,49 @@ describe('/service/catalogue Catalogue service', () => {
                 res.body.should.be.a('array');
                 res.body.length.should.be.eql(3);
                 res.body.should.be.eql([
-                    { category: 'Sports', product: 'Liverpool TV', locationID: 'LIVERPOOL' },
-                    { category: 'News', product: 'Sky News', locationID: '' },
-                    { category: 'News', product: 'Sky Sports News', locationID: '' }
+                    { id: 3, category: 'Sports', product: 'Liverpool TV', locationID: 'LIVERPOOL' },
+                    { id: 4, category: 'News', product: 'Sky News', locationID: '' },
+                    { id: 5, category: 'News', product: 'Sky Sports News', locationID: '' }
                 ]);
+                done();
+            });
+    });
+});
+
+describe('/service/checkout Checkout service', () => {
+
+    before((done) => {
+        let skyServerApp = skyServer();
+        server = skyServerApp.listen(3000);
+        done();
+    });
+
+    after((done) => {
+        server.close();
+        done();
+    });
+    
+    it('POST /service/checkout products are invalid error', (done) => {
+        chai.request(server)
+            .post('/service/checkout')
+            .send({ 'products': '' })
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.be.a('object');
+                res.body.error.should.be.eql('No products has been discovered!');
+                done();
+            });
+    });
+
+    it('POST /service/checkout products are valid', (done) => {
+        chai.request(server)
+            .post('/service/checkout')
+            .send({ 'products': [ 1, 2, 3 ] })
+            .end((err, res) => {
+                console.log('body', res.body);
+                res.should.have.status(200);
+                res.body.should.be.a('string');
+                res.body.should.be.eql('Checkout is ok!');
                 done();
             });
     });

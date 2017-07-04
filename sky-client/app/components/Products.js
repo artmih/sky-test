@@ -26,18 +26,20 @@ export default class Products extends React.Component {
             for (let i = 0; i <= products.items.length - 1; i++) {
                 if (products.items[i].category === "Sports") {
                     sports.push({
+                        id: products.items[i].id,
                         category: products.items[i].category,
                         product: products.items[i].product,
                         locationID: products.items[i].locationID,
-                        selected: basket.items.indexOf(products.items[i].product) > -1 ? true : false
+                        selected: basket.items.indexOf(products.items[i].id) > -1 ? true : false
                     });
                 }
                 else if (products.items[i].category === "News") {
                     news.push({
+                        id: products.items[i].id,
                         category: products.items[i].category,
                         product: products.items[i].product,
                         locationID: products.items[i].locationID,
-                        selected: basket.items.indexOf(products.items[i].product) > -1 ? true : false
+                        selected: basket.items.indexOf(products.items[i].id) > -1 ? true : false
                     });
                 }
             }
@@ -49,13 +51,13 @@ export default class Products extends React.Component {
         }
     }
 
-    toggleProduct(item) {
+    toggleProduct(product) {
         const { basket } = this.props;
 
-        if (item.selected)
-            this.props.removeItemFromBasket({ id: item.product });
+        if (product.selected)
+            this.props.removeItemFromBasket({ id: product.id });
         else
-            this.props.addItemToBasket({ id: item.product });
+            this.props.addItemToBasket({ id: product.id });
     }
 
     renderItemsPanel(panelName, items) {
@@ -64,13 +66,13 @@ export default class Products extends React.Component {
                 <div className="panel panel-default">
                     <div className="panel-heading">{panelName}</div>
                     <div className="panel-body">
-                        {items.map(item => (
-                            <div className="checkbox" key={item.product}>
+                        {items.map(product => (
+                            <div className="checkbox" key={product.id}>
                                 <label>
                                     <input type="checkbox" 
-                                        checked={item.selected}
-                                        onChange={() => { this.toggleProduct(item) }} />
-                                        {item.product}
+                                        checked={product.selected}
+                                        onChange={() => { this.toggleProduct(product) }} />
+                                        {product.product}
                                     </label>
                             </div>
                         ))}
@@ -82,6 +84,7 @@ export default class Products extends React.Component {
 
     render() {
         const parsedProducts = this.parseProducts();
+        
         return (
             <div>
                 <div className="page-header">

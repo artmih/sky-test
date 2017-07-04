@@ -43,6 +43,7 @@ class App extends React.Component {
                     </div>
                     <div className="col-md-4 col-xs-12">
                         <Basket 
+                            products={this.props.products}
                             basket={this.props.basket} 
                             removeItemFromBasket={this.props.basketActions.removeProduct}
                             clearBasket={this.props.basketActions.removeAllProducts} />

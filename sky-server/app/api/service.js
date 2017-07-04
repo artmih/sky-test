@@ -48,8 +48,23 @@ serviceRouter.post('/catalogue', function (req, res) {
     }
 });
 
-serviceRouter.post('/confirm', function (req, res) {
-    res.status(200).send("CONFIRM SUCCESS");
+serviceRouter.post('/checkout', function (req, res) {
+    console.log('req', req.body);
+    
+    if (req.body.products !== undefined && req.body.products.length > 0) {
+        for (let i = 0; i <= req.body.products - 1; i++) {
+            if (PRODUCTS.indexOf(req.body.products[i].id) === -1) {
+                return res.status(404).send(new ApiError('Some products can\'t be found!'));
+            }
+        }
+
+        res.status(200).json("Checkout is ok!").send();
+    }
+    else {
+        res.status(404).send(new ApiError('No products has been discovered!'));
+    }
+    
+    
 });
 
 module.exports = serviceRouter;

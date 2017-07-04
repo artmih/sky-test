@@ -13,8 +13,8 @@ export default class Basket extends React.Component {
         this.renderCheckoutMsg = this.renderCheckoutMsg.bind(this);
     }
 
-    removeItemFromBasket(itemId) {
-        this.props.removeItemFromBasket({ id: itemId });
+    removeItemFromBasket(product) {
+        this.props.removeItemFromBasket({ id: product.id });
     }
 
     clearBasket(e) {
@@ -22,12 +22,32 @@ export default class Basket extends React.Component {
     }
 
     checkoutBasket() {
-        axios.post('/service/confirm', {})
+        const { basket } = this.props;
+
+        axios.post('/service/confirm', { products: basket.items })
             .then((response) => {
                 if (response.data === "CONFIRM SUCCESS") {
                     this.setState({checkoutConfirm: true});
                 }
             });
+    }
+
+    parseBasketProducts() {
+        const { products, basket } = this.props;
+        let basketProducts = [];
+
+        for (let i = 0; i <= basket.items.length - 1; i++) {
+            for (let j = 0; j <= products.items.length - 1; j++) {
+                if (products.items[j].id === basket.items[i]) {
+                    basketProducts.push({
+                        id: products.items[j].id,
+                        name: products.items[j].product
+                    });
+                }
+            }
+        }
+
+        return basketProducts;
     }
 
     renderCheckoutMsg() {
@@ -44,15 +64,16 @@ export default class Basket extends React.Component {
         const { basket } = this.props;
         
         if (basket.items.length > 0) {
+            const parseBasketProducts = this.parseBasketProducts();
             return (
                 <div className="panel panel-default">
                     <div className="panel-heading">Basket:</div>
                     <div className="panel-body">
                         <ul className="list-group">
-                            {basket.items.map(item => (
-                                <li key={item} className="list-group-item">
-                                    {item}
-                                    <span className="btn btn-xs btn-default pull-right" onClick={() => { this.removeItemFromBasket(item); }}>
+                            {parseBasketProducts.map(product => (
+                                <li key={product.id} className="list-group-item">
+                                    {product.name}
+                                    <span className="btn btn-xs btn-default pull-right" onClick={() => { this.removeItemFromBasket(product); }}>
                                         <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                     </span>
                                 </li>
@@ -90,7 +111,6 @@ export default class Basket extends React.Component {
                     <h2>Choosed products</h2>
                 </div>
                 {this.renderBasket()}
-                
             </div>
         );
     }
